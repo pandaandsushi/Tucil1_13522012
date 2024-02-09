@@ -10,14 +10,14 @@ def can_connect(curr_buffer,seqarr):
                     count+=1
                 print("Count",count)
                 if len(curr_buffer)-count==0:
-                    return True
-    return False
+                    return True,count
+    return False,count
 
 # Example usage:
-# arr1 = ["AD"]
-# arr2 = ["AD", "FF", "SS", "AA"]
-# result = can_connect(arr1, arr2)
-# print(result)  # Output: True
+arr1 = ["AD","FF"]
+arr2 = ["AD", "FF", "SS", "AA"]
+result = can_connect(arr1, arr2)
+print(result)  # Output: True
 
 def count_points(buffer,arr_of_seq,arr_of_points):
     res = 0

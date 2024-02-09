@@ -163,8 +163,8 @@ def can_connect(curr_buffer,seqarr):
                 if(curr_buffer[j+i] == seqarr[j]):
                     count+=1
                 if len(curr_buffer)-count==0:
-                    return True
-    return False
+                    return True,count
+    return False,0
 
 def count_points(buffer,arr_of_seq,arr_of_points):
     res = 0
@@ -203,43 +203,6 @@ def max_point(curr_buffer,list_of_sequences,points,final_points,final_buffer):
         final_buffer = curr_buffer
     return final_points,final_buffer
 
-# ALGOR PROCESS FINAL
-# def process(rows, cols, idcol, mused, matrix, list_of_sequences, curr_buffer, points, buffer_size, seq):
-#     i=0
-#     while len(curr_buffer) < buffer_size:
-#         # choose from vertical angle
-#         while i < rows:
-#             copy_mused = mused
-#             id_seq = len(curr_buffer)
-#             if check_next_horizontal(i,idcol,list_of_sequences[seq][id_seq],matrix,cols) and mused[i][idcol] != False:
-#                 curr_buffer.append(matrix[i][idcol])
-#                 mused[i][idcol] = False
-#                 final_points, final_buffer = max_point(curr_buffer,list_of_sequences,points,final_points,final_buffer)
-#                 # choose from horizontal angle
-#                 j = 0
-#                 while j < cols:
-#                     if len(curr_buffer) < buffer_size:
-#                         sec_copy_mused = mused
-#                         id_seq = len(curr_buffer)
-
-#                         if check_next_vertical(j, i, list_of_sequences[seq][id_seq], matrix, rows) and mused[j][i] != False:
-#                             curr_buffer.append(matrix[j][i])
-#                             mused[j][i] = False
-#                             final_points,final_buffer = max_point(curr_buffer, list_of_sequences, points, final_points,final_buffer)
-#                             i = 0  # Reset i to 0 in the next iteration
-#                             break
-
-#                         mused = sec_copy_mused
-#                     else:
-#                         break
-
-#                     j += 1
-#                 mused = copy_mused
-#             i += 1
-
-#     return final_points,final_buffer
-
-
 
 # Base variables
 curr_coords = []             # array of array of kumpulan koordinat posible ans
@@ -252,7 +215,10 @@ for seq in range (num_of_sequences):
     print("Sequence ke-" + str(seq))
     if (len(list_of_sequences[seq])<=buffer_size):
         curr_buffer = []
+        stop=False
         while len(curr_buffer) < buffer_size:
+            if stop:
+                break
             for idcol in range (cols):    # check mulai dr baris pertama
                 curr_buffer = []
                 curr_coords = []
@@ -264,50 +230,123 @@ for seq in range (num_of_sequences):
                     # choose from vertical 
                     i = 0
                     first = True
+                    id_seq = len(curr_buffer)
                     while i < rows:
+                        if stop:
+                            break
                         if first:
                             # print("Nilai i:",i)
-                            print("Masuk ke vertical sec\n")
+                            print("------------------Masuk ke vertical sec (FIRST)\n")
                             copy_mused = mused
-                            print(mused)
+                            
                             print("Curr coord: ",curr_coords)
-                            print("----final pts:",final_points)
                             print("Curr buffer ",curr_buffer)
                             print("TESSSS",matrix[i][idcol])
                             id_seq = len(curr_buffer)
-                            print("Next token: ",list_of_sequences[seq][id_seq])
-                            print(mused[i][idcol])
+                            print("Next tokennn: ",list_of_sequences[seq][id_seq])
                             print("Nilai i:",i)
                             print("Nilai idcol:",idcol)
-                            if check_next_horizontal(i,idcol,list_of_sequences[seq][id_seq],matrix,cols) and mused[i][idcol] != False and matrix[i][idcol] == list_of_sequences[seq][id_seq-1]:
+
+
+                            # TESTING UNTUK CONT STLH KETEMU 1 SEQ
+                            # if id_seq >= len(list_of_sequences[seq]):
+                                # connect,overlap = can_connect(curr_buffer,list_of_sequences[seq])
+                                # if connect:
+                                #     for secseq in range (num_of_sequences):
+                                #         if secseq!=seq and len(list_of_sequences[secseq]-overlap)<=(buffer_size-len(curr_buffer)):
+                                #             while i < rows:
+                                #                 copy_mused = mused
+                                                
+                                #                 print("Curr coord: ",curr_coords)
+                                #                 print("----final pts:",final_points)
+                                #                 print("Curr buffer ",curr_buffer)
+                                #                 print("TESSSS",matrix[i][j])
+                                #                 id_seq = len(curr_buffer)
+                                #                 # print("Next token: ",list_of_sequences[seq][id_seq])
+                                #                 print(mused[i][j])
+                                #                 print("Nilai i:",i)
+                                #                 print("Nilai j:",j)
+                                #                 if check_next_horizontal(i,j,list_of_sequences[seq][id_seq],matrix,cols) and mused[i][j] != False and matrix[i][j] == list_of_sequences[seq][id_seq-1]:
+                                #                     curr_buffer.append(matrix[i][j])
+                                #                     curr_coords.append((i,j))
+                                #                     mused[i][j] = False
+                                #                     final_points, final_buffer = max_point(curr_buffer,list_of_sequences,points,final_points,final_buffer)
+                                #                     print("Final points vertical",final_points)
+                                #                     print(curr_buffer)
+                                #                     print("")
+                                #                     # choose from horizontal angle
+                                #                     j = 0
+                                #                     while j < cols:
+                                #                         if len(curr_buffer) < buffer_size:
+                                #                             print("masuk ke horizontal sec\n")
+                                                            
+                                #                             print("Nilai i: ", i)
+                                #                             print("Nilai j: ", j)
+                                #                             print("Curr buffer 2: ",curr_buffer)
+                                #                             print("Curr coord 2: ",curr_coords)
+                                #                             print("TESSSS",matrix[i][j])
+                                #                             id_seq = len(curr_buffer)
+                                #                             # print("Next token: ",list_of_sequences[seq][id_seq]) #ini token yang mau kita check di next
+                                #                             print(mused[i][j])
+                                #                             sec_copy_mused = mused
+                                #                             # if id_seq >= len(list_of_sequences[seq]):
+                                #                             #     break
+
+                                #                             if check_next_vertical(i, j, list_of_sequences[seq][id_seq], matrix, rows) and mused[j][i] != False and matrix[i][j] == list_of_sequences[seq][id_seq-1]:
+                                #                                 curr_buffer.append(matrix[i][j])
+                                #                                 curr_coords.append((i,j))
+                                #                                 mused[i][j] = False
+                                #                                 final_points,final_buffer = max_point(curr_buffer, list_of_sequences, points, final_points,final_buffer)
+                                #                                 print("Final points horizontal",final_points)
+                                #                                 print("")
+                                #                                 i = -1  # Reset i to 0 in the next iteration
+                                #                                 first = False
+                                #                                 break
+                                #                             mused = sec_copy_mused
+                                #                         else:
+                                #                             break
+                                #                         j += 1
+                                #                     mused = copy_mused
+                                #                 i += 1
+                            # TESTING LIMIT 
+                            cekhori = check_next_horizontal(i,idcol,list_of_sequences[seq][id_seq],matrix,cols)
+                            if cekhori==False or matrix[i][idcol] != list_of_sequences[seq][id_seq-1]:
+                                stop = True
+                                break
+
+                            if cekhori and mused[i][idcol] != False and matrix[i][idcol] == list_of_sequences[seq][id_seq-1]:
                                 curr_buffer.append(matrix[i][idcol])
                                 curr_coords.append((i,idcol))
                                 mused[i][idcol] = False
                                 final_points, final_buffer = max_point(curr_buffer,list_of_sequences,points,final_points,final_buffer)
-                                print("Final points vertical",final_points)
-                                print("")
                                 # choose from horizontal angle
                                 j = 0
+                                if stop:
+                                    break
                                 while j < cols:
                                     if len(curr_buffer) < buffer_size:
-                                        print("masuk ke horizontal sec\n")
-                                        print(mused)
+                                        print("---------------------masuk ke horizontal sec (FIRST)\n")
+                                        
                                         print("Nilai i: ", i)
                                         print("Nilai j: ", j)
                                         print("Curr buffer 2: ",curr_buffer)
                                         print("Curr coord 2: ",curr_coords)
                                         print("TESSSS",matrix[i][j])
                                         id_seq = len(curr_buffer)
-                                        print("Next token: ",list_of_sequences[seq][id_seq]) #ini token yang mau kita check di next
-                                        print(mused[i][j])
+                                        # print("Next token: ",list_of_sequences[seq][id_seq]) #ini token yang mau kita check di next
                                         sec_copy_mused = mused
-                                        if check_next_vertical(i, j, list_of_sequences[seq][id_seq], matrix, rows) and mused[j][i] != False and matrix[i][j] == list_of_sequences[seq][id_seq-1]:
+                                        # if id_seq >= len(list_of_sequences[seq]):
+                                        #     break
+                                        cekveri = check_next_vertical(i, j, list_of_sequences[seq][id_seq], matrix, rows)
+                                        if cekveri==False or matrix[i][j] != list_of_sequences[seq][id_seq-1]:
+                                            stop = True
+                                            print("STOPPPPPPP!")
+                                            break
+                                        if cekveri and mused[j][i] != False and matrix[i][j] == list_of_sequences[seq][id_seq-1]:
                                             curr_buffer.append(matrix[i][j])
                                             curr_coords.append((i,j))
                                             mused[i][j] = False
                                             final_points,final_buffer = max_point(curr_buffer, list_of_sequences, points, final_points,final_buffer)
-                                            print("Final points horizontal",final_points)
-                                            print("")
                                             i = -1  # Reset i to 0 in the next iteration
                                             first = False
                                             break
@@ -318,49 +357,59 @@ for seq in range (num_of_sequences):
                                 mused = copy_mused
                             i += 1
                         else:
+                            if stop:
+                                break
                             while i < rows:
                                 # print("Nilai i:",i)
-                                print("Masuk ke vertical sec\n")
+                                print("--------------------------Masuk ke vertical sec (NOT FIRST)\n")
                                 copy_mused = mused
-                                print(mused)
+                                
                                 print("Curr coord: ",curr_coords)
-                                print("----final pts:",final_points)
                                 print("Curr buffer ",curr_buffer)
                                 print("TESSSS",matrix[i][j])
                                 id_seq = len(curr_buffer)
-                                print("Next token: ",list_of_sequences[seq][id_seq])
-                                print(mused[i][j])
+                                # print("Next token: ",list_of_sequences[seq][id_seq])
                                 print("Nilai i:",i)
                                 print("Nilai j:",j)
-                                if check_next_horizontal(i,j,list_of_sequences[seq][id_seq],matrix,cols) and mused[i][j] != False and matrix[i][j] == list_of_sequences[seq][id_seq-1]:
+                                # if id_seq >= len(list_of_sequences[seq]):
+                                #     break
+                                cekhori = check_next_horizontal(i,idcol,list_of_sequences[seq][id_seq],matrix,cols)
+                                if cekhori==False or matrix[i][idcol] != list_of_sequences[seq][id_seq-1]:
+                                    stop = True
+                                    break
+
+                                if cekhori and mused[i][j] != False and matrix[i][j] == list_of_sequences[seq][id_seq-1]:
                                     curr_buffer.append(matrix[i][j])
                                     curr_coords.append((i,j))
                                     mused[i][j] = False
                                     final_points, final_buffer = max_point(curr_buffer,list_of_sequences,points,final_points,final_buffer)
-                                    print("Final points vertical",final_points)
-                                    print("")
                                     # choose from horizontal angle
                                     j = 0
+                                    if stop:
+                                        break
                                     while j < cols:
                                         if len(curr_buffer) < buffer_size:
-                                            print("masuk ke horizontal sec\n")
-                                            print(mused)
+                                            print("-------------------------Masuk ke horizontal sec (NOT FIRST)\n")
+                                            
                                             print("Nilai i: ", i)
                                             print("Nilai j: ", j)
                                             print("Curr buffer 2: ",curr_buffer)
                                             print("Curr coord 2: ",curr_coords)
                                             print("TESSSS",matrix[i][j])
                                             id_seq = len(curr_buffer)
-                                            print("Next token: ",list_of_sequences[seq][id_seq]) #ini token yang mau kita check di next
-                                            print(mused[i][j])
+                                            # print("Next token: ",list_of_sequences[seq][id_seq]) #ini token yang mau kita check di next
                                             sec_copy_mused = mused
-                                            if check_next_vertical(i, j, list_of_sequences[seq][id_seq], matrix, rows) and mused[j][i] != False and matrix[i][j] == list_of_sequences[seq][id_seq-1]:
+                                            # if id_seq >= len(list_of_sequences[seq]):
+                                            #     break
+                                            cekveri = check_next_vertical(i, j, list_of_sequences[seq][id_seq], matrix, rows)
+                                            if cekveri==False or matrix[i][j] != list_of_sequences[seq][id_seq-1]:
+                                                stop = True
+                                                break
+                                            if cekveri and mused[j][i] != False and matrix[i][j] == list_of_sequences[seq][id_seq-1]:
                                                 curr_buffer.append(matrix[i][j])
                                                 curr_coords.append((i,j))
                                                 mused[i][j] = False
                                                 final_points,final_buffer = max_point(curr_buffer, list_of_sequences, points, final_points,final_buffer)
-                                                print("Final points horizontal",final_points)
-                                                print("")
                                                 i = -1  # Reset i to 0 in the next iteration
                                                 first = False
                                                 break
@@ -390,6 +439,8 @@ while(True):
             output.write(str(final_points) + "\n")
             output.write(str(' '.join(final_buffer)) + "\n") 
             # TESTING - Save coords not yet implemented
+            for c in final_coords:
+                output.write(f"{c}\n")
             output.write(f"{elapsed_time} ms")
         output.close()
         print("Saved successfully.\n")
