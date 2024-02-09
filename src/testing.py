@@ -13,5 +13,13 @@
 # seqs = ["X","A","C"]
 # print(calc_intersect(buffer,seqs))
 
-for i in range (0,3):
-    print(i)
+def check_next_horizontal(idrow,idcol,token,matrix,sumcol):
+    count = 0
+    for i in range (0,sumcol):
+        if (matrix[idrow][i] == token) and (i!=idcol):
+            count+=1
+    print("Count",count)
+    if count!=0:
+        return True
+    else:
+        return False
