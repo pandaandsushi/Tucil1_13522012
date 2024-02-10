@@ -169,11 +169,15 @@ def can_connect(curr_buffer,seqarr):
 def count_points(buffer,arr_of_seq,arr_of_points):
     res = 0
     for i in range (len(arr_of_seq)):
+        remaindertocheck = len(buffer)
         for j in range (len(buffer)):
+            remaindertocheck-=1
             if (buffer[j]==arr_of_seq[i][0]):
-                count = 1
+                count = 0
                 if len(buffer)>=len(arr_of_seq[i]):
-                    for k in range(len(arr_of_seq[i])-1):
+                    for k in range(len(arr_of_seq[i])):
+                        if remaindertocheck+1<len(arr_of_seq[i]):
+                            return 0
                         if (buffer[k+j] == arr_of_seq[i][k]):
                             count += 1
                     if count == len(arr_of_seq[i]):
@@ -244,7 +248,7 @@ for seq in range (num_of_sequences):
                     countstop = 0
                     while i < rows:
                         if first:
-                            # print("Nilai i:",i)
+                            print("Final point", final_points)
                             print("------------------Masuk ke vertical sec (FIRST)\n")
                             copy_mused = mused
                             
@@ -335,6 +339,7 @@ for seq in range (num_of_sequences):
                                 countstop=0
                                 while j < cols:
                                     if len(curr_buffer) < buffer_size:
+                                        print("Final point", final_points)
                                         print("---------------------masuk ke horizontal sec (FIRST)\n")
                                         
                                         print("Nilai i: ", i)
@@ -371,10 +376,10 @@ for seq in range (num_of_sequences):
                             
                             countstop=0
                             while i < rows:
-                                # print("Nilai i:",i)
+                                print("CURR BUFFER:", curr_buffer)
+                                print("Final point", final_points)
                                 print("--------------------------Masuk ke vertical sec (NOT FIRST)\n")
                                 copy_mused = mused
-                                
                                 print("Curr coord: ",curr_coords)
                                 print("Curr buffer ",curr_buffer)
                                 print("TESSSS",matrix[i][j])
@@ -394,6 +399,7 @@ for seq in range (num_of_sequences):
                                 if cekhori and mused[i][j] != False and matrix[i][j] == list_of_sequences[seq][id_seq-1]:
                                     curr_buffer.append(matrix[i][j])
                                     curr_coords.append((i,j))
+                                    
                                     mused[i][j] = False
                                     final_points, final_buffer = max_point(curr_buffer,list_of_sequences,points,final_points,final_buffer)
                                     # choose from horizontal angle
@@ -401,6 +407,7 @@ for seq in range (num_of_sequences):
                                     countstop=0
                                     while j < cols:
                                         if len(curr_buffer) < buffer_size:
+                                            print("Final point", final_points)
                                             print("-------------------------Masuk ke horizontal sec (NOT FIRST)\n")
                                             
                                             print("Nilai i: ", i)

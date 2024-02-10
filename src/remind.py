@@ -14,26 +14,29 @@ def can_connect(curr_buffer,seqarr):
     return False,count
 
 # Example usage:
-arr1 = ["AD","FF"]
-arr2 = ["AD", "FF", "SS", "AA"]
-result = can_connect(arr1, arr2)
-print(result)  # Output: True
+# arr1 = ["AD","FF"]
+# arr2 = ["AD", "FF", "SS", "AA"]
+# result = can_connect(arr1, arr2)
+# print(result)  # Output: True
 
 def count_points(buffer,arr_of_seq,arr_of_points):
     res = 0
     for i in range (len(arr_of_seq)):
+        remaindertocheck = len(buffer)
         for j in range (len(buffer)):
+            remaindertocheck-=1
             if (buffer[j]==arr_of_seq[i][0]):
-                count = 1
+                count = 0
                 if len(buffer)>=len(arr_of_seq[i]):
-                    print("--Nilai j:",j)
-                    for k in range(len(arr_of_seq[i])-1):
-                        print("XX")
-                        print(k+j+1)
+                    print("--Nilai remainder:",remaindertocheck)
+                    for k in range(len(arr_of_seq[i])):
+                        if remaindertocheck+1<len(arr_of_seq[i]):
+                            return 0
+                        print("Buff to check ",buffer[k+j])
                         if (buffer[k+j] == arr_of_seq[i][k]):
                             count += 1
                     if count == len(arr_of_seq[i]):
-                        print(arr_of_points[i])
+                        print("POINTT COUNT",count)
                         res = arr_of_points[i] + res
                         break
                 else:
@@ -61,7 +64,7 @@ def count_points(buffer,arr_of_seq,arr_of_points):
 #                     break
 #     return res
 buffer = ["50", "BD", "E9","1C"]
-seqs = [["BD","E9","1C"],["B","C","D"],["X","A","A"]]
+seqs = [["BD","E9","1C"],["50","BD"],["B","C","D"],["X","A","A"]]
 # buffer = ["X","A","B","C","D","A"]
 # seqs = [["A","B","C"],["B","C","D"],["X","A","A"]]
 point = [10,80,3]
