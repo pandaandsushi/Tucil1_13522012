@@ -1,3 +1,7 @@
+# Final coords not yet set
+# Buffer continues
+
+
 def can_connect(curr_buffer,seqarr):
     for i in range (len(curr_buffer)):
         if (curr_buffer[i] == seqarr[0]):
