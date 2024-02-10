@@ -216,14 +216,24 @@ for seq in range (num_of_sequences):
     if (len(list_of_sequences[seq])<=buffer_size):
         curr_buffer = []
         stop=False
+        mainstop = False
+        maincounterstop=0
         while len(curr_buffer) < buffer_size:
-            if stop:
+            print(maincounterstop)
+            if mainstop:
                 break
             for idcol in range (cols):    # check mulai dr baris pertama
                 curr_buffer = []
                 curr_coords = []
                 mused = [[True for _ in range(cols)] for _ in range(rows)]
-                if check_vertical_initial(idcol,list_of_sequences[seq][0],matrix,rows):
+                cekveriini = check_vertical_initial(idcol,list_of_sequences[seq][0],matrix,rows)
+                if maincounterstop==cols:
+                    mainstop=True
+                if cekveriini==False:
+                    maincounterstop+=1
+                print("LAST")
+                print("MainCounterstop:", maincounterstop)
+                if cekveriini:
                     curr_buffer.append(matrix[0][idcol])
                     curr_coords.append((0,idcol))
                     mused[0][idcol] = False
@@ -231,9 +241,8 @@ for seq in range (num_of_sequences):
                     i = 0
                     first = True
                     id_seq = len(curr_buffer)
+                    countstop = 0
                     while i < rows:
-                        if stop:
-                            break
                         if first:
                             # print("Nilai i:",i)
                             print("------------------Masuk ke vertical sec (FIRST)\n")
@@ -311,7 +320,9 @@ for seq in range (num_of_sequences):
                             # TESTING LIMIT 
                             cekhori = check_next_horizontal(i,idcol,list_of_sequences[seq][id_seq],matrix,cols)
                             if cekhori==False or matrix[i][idcol] != list_of_sequences[seq][id_seq-1]:
-                                stop = True
+                                countstop+=1
+                            if countstop==rows:
+                                maincounterstop+=1
                                 break
 
                             if cekhori and mused[i][idcol] != False and matrix[i][idcol] == list_of_sequences[seq][id_seq-1]:
@@ -321,8 +332,7 @@ for seq in range (num_of_sequences):
                                 final_points, final_buffer = max_point(curr_buffer,list_of_sequences,points,final_points,final_buffer)
                                 # choose from horizontal angle
                                 j = 0
-                                if stop:
-                                    break
+                                countstop=0
                                 while j < cols:
                                     if len(curr_buffer) < buffer_size:
                                         print("---------------------masuk ke horizontal sec (FIRST)\n")
@@ -339,8 +349,9 @@ for seq in range (num_of_sequences):
                                         #     break
                                         cekveri = check_next_vertical(i, j, list_of_sequences[seq][id_seq], matrix, rows)
                                         if cekveri==False or matrix[i][j] != list_of_sequences[seq][id_seq-1]:
+                                            countstop+=1
+                                        if countstop==cols:
                                             stop = True
-                                            print("STOPPPPPPP!")
                                             break
                                         if cekveri and mused[j][i] != False and matrix[i][j] == list_of_sequences[seq][id_seq-1]:
                                             curr_buffer.append(matrix[i][j])
@@ -357,8 +368,8 @@ for seq in range (num_of_sequences):
                                 mused = copy_mused
                             i += 1
                         else:
-                            if stop:
-                                break
+                            
+                            countstop=0
                             while i < rows:
                                 # print("Nilai i:",i)
                                 print("--------------------------Masuk ke vertical sec (NOT FIRST)\n")
@@ -375,7 +386,9 @@ for seq in range (num_of_sequences):
                                 #     break
                                 cekhori = check_next_horizontal(i,idcol,list_of_sequences[seq][id_seq],matrix,cols)
                                 if cekhori==False or matrix[i][idcol] != list_of_sequences[seq][id_seq-1]:
-                                    stop = True
+                                    countstop+=1
+                                if countstop==rows:
+                                    maincounterstop+=1
                                     break
 
                                 if cekhori and mused[i][j] != False and matrix[i][j] == list_of_sequences[seq][id_seq-1]:
@@ -385,8 +398,7 @@ for seq in range (num_of_sequences):
                                     final_points, final_buffer = max_point(curr_buffer,list_of_sequences,points,final_points,final_buffer)
                                     # choose from horizontal angle
                                     j = 0
-                                    if stop:
-                                        break
+                                    countstop=0
                                     while j < cols:
                                         if len(curr_buffer) < buffer_size:
                                             print("-------------------------Masuk ke horizontal sec (NOT FIRST)\n")
@@ -403,6 +415,8 @@ for seq in range (num_of_sequences):
                                             #     break
                                             cekveri = check_next_vertical(i, j, list_of_sequences[seq][id_seq], matrix, rows)
                                             if cekveri==False or matrix[i][j] != list_of_sequences[seq][id_seq-1]:
+                                                countstop+=1
+                                            if countstop==cols:
                                                 stop = True
                                                 break
                                             if cekveri and mused[j][i] != False and matrix[i][j] == list_of_sequences[seq][id_seq-1]:
@@ -428,8 +442,11 @@ elapsed_time = end_time - start_time
 # Output on terminal
 print("---------------- Results:\n")
 print("Points obtained: " + str(final_points))
-print(' '.join(final_buffer))
-print(final_coords)
+if final_points==0:
+    print("It aint worth/no possible solution")
+else:
+    print(' '.join(final_buffer))
+    print(final_coords)
 print(str(elapsed_time) + " ms\n")
 while(True):
     # prompt = input("Do you want to save the result? (y/n) => ")
