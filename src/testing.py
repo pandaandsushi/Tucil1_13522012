@@ -1,4 +1,7 @@
-# from collections import Counter
+for i in range (10):
+    i=5
+    print(i)
+
 def count_points(buffer,arr_of_seq,arr_of_points):
     res = 0
     for i in range (len(arr_of_seq)):

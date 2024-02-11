@@ -1,52 +1,27 @@
-# Final coords not yet set
 # Buffer continues
-
-
-def can_connect(curr_buffer,seqarr):
-    for i in range (len(curr_buffer)):
-        if (curr_buffer[i] == seqarr[0]):
-            count=0
-            if len(curr_buffer)<len(seqarr):
-                for j in range (len(seqarr)-1):
-                    print("J",j)
-                    print("I",i)
-                    if i+j<len(curr_buffer):
-                        if(curr_buffer[j+i] == seqarr[j]):
-                            print("succeed\n")
-                            print(f"{curr_buffer[j+i]}\n")
-                            print(f"{seqarr[j]}\n")
-                            count+=1
-                        else:
-                            count=0
-                            break
-                        print("Count",count)
-            else:
-                for j in range (len(seqarr)):
-                    print("J",j)
-                    print("I",i)
-                    if i+j<len(curr_buffer):
-                        if(curr_buffer[j+i] == seqarr[j]):
-                            print("succeed\n")
-                            print(f"{curr_buffer[j+i]}\n")
-                            print(f"{seqarr[j]}\n")
-                            count+=1
-                        else:
-                            count=0
-                            break
-                        print("Count",count)
-                if 
-    # print(i)
-    # if len(curr_buffer)-1-i!=0:
-    #     return False,0
-    if count!=0:
-        return True,count
+# buat cp per sequence
+# 2
+# 7A BD 1C 7A E9 1C
+# 20
+# BD E9 1C E9 1C
+# 30
+def can_connect(curr_buffer, seqarr):
+    overlap_lens = (i + 1 for i, e in enumerate(seqarr) if e == curr_buffer[-1])
+    for overlap_len in overlap_lens:
+        for i in range(overlap_len):
+            if curr_buffer[-overlap_len + i] != seqarr[i]:
+                break
+        else:
+            return True,overlap_len
     return False,0
 
 # Example usage:
-arr1 = ["SS","AD","FF","SS","S","S"]
-arr2 = ["AD", "FF", "SS","S"]
-result = can_connect(arr1, arr2)
+arr1 = ["SS","S"]
+arr2 = ["SS","S","SS"]
+result,x = can_connect(arr1, arr2)
 print(result)  # Output: True
+print(x)
+
 
 def count_points(buffer,arr_of_seq,arr_of_points):
     res = 0
