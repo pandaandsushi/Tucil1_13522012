@@ -3,7 +3,14 @@ def sublist(main_list, sublist):
         if main_list[i:i+len(sublist)] == sublist:
             return True
     return False
-
+def check_seq(curr_buffer,list_of_sequences):
+    count=0
+    for i in range (len(list_of_sequences)):
+        if sublist(curr_buffer,list_of_sequences[i]):
+            count+=1
+    if count==len(list_of_sequences):
+        return True
+    return False 
 # Example usage:
 a = [1, 2, 3, 4, 5]
 b1 = [2, 3]
@@ -20,7 +27,6 @@ print(sublist(curr_buffer,list_of_sequences))
 def count_points(buffer,arr_of_seq,arr_of_points):
     res = 0
     for i in range (len(arr_of_seq)):
-        print("Masuk")
         if sublist(buffer,arr_of_seq[i]):
             res+=arr_of_points[i]
     return res

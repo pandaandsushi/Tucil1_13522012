@@ -5,6 +5,9 @@
 # 20
 # BD E9 1C E9 1C
 # 30
+
+
+
 def can_connect(curr_buffer, seqarr):
     if len(curr_buffer)==1 and seqarr[0]!=curr_buffer[0]:
         return False,0
