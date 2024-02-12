@@ -70,12 +70,7 @@ while True:
             elif "seq_max_size" in key:
                 seq_max_size = int(input(f"{prompt}: "))
 
-        # TESTING - Input by CLI
-        print("Tokens:", tokens)
-        print("Buffer Size:", buffer_size)
-        print("Matrix Size (rows x cols):", rows, "x",cols)
-        print("Number of Sequences:", num_of_sequences)
-        print("Sequence Max Size:", seq_max_size)
+
 
         # Randomized matrix
         matrix = [[None for _ in range(cols)] for _ in range(rows)]
@@ -107,7 +102,7 @@ while True:
         print("Wrong input, try again.\n")
 
 
-# TESTING reading file inputs
+# Display reading file inputs
 print("\nBuffer size:", buffer_size)
 print("Row:", rows)
 print("Col:", cols)
@@ -116,6 +111,7 @@ print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in matrix]))
 print("\nSequences:", num_of_sequences)
 print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in list_of_sequences]))
 print("Points",points)
+print("")
 
 # Check if there is a token seq in there -> boolean
 def check_vertical_initial(idcol,token,matrix,sumrow):
@@ -140,8 +136,11 @@ def check_next_horizontal(idrow,idcol,token,matrix,sumcol):
 # Check if current buffer could be connected to the seqarr to check on overlapping
 # Code was taken from stackoverflow user "dddsnn" with some additional changes
 def can_connect(curr_buffer, seqarr):
+    if len(curr_buffer)==1 and seqarr[0]!=curr_buffer[0]:
+        return False,0
     overlap_lens = (i + 1 for i, e in enumerate(seqarr) if e == curr_buffer[-1])
     for overlap_len in overlap_lens:
+        print("overlaplen",overlap_len)
         for i in range(overlap_len):
             if curr_buffer[-overlap_len + i] != seqarr[i]:
                 break
@@ -152,22 +151,8 @@ def can_connect(curr_buffer, seqarr):
 def count_points(buffer,arr_of_seq,arr_of_points):
     res = 0
     for i in range (len(arr_of_seq)):
-        remaindertocheck = len(buffer)
-        for j in range (len(buffer)):
-            remaindertocheck-=1
-            if (buffer[j]==arr_of_seq[i][0]):
-                count = 0
-                if len(buffer)>=len(arr_of_seq[i]):
-                    for k in range(len(arr_of_seq[i])):
-                        if remaindertocheck+1<len(arr_of_seq[i]):
-                            break
-                        if (buffer[k+j] == arr_of_seq[i][k]):
-                            count += 1
-                    if count == len(arr_of_seq[i]):
-                        res = arr_of_points[i] + res
-                        break
-                else:
-                    return 0
+        if sublist(buffer,arr_of_seq[i]):
+            res+=arr_of_points[i]
     return res
 
 def sublist(main_list, sublist):
@@ -188,6 +173,7 @@ def find_optimum_points (sets_of_buffer,arr_of_seq,arr_of_points):
 
 def max_point(curr_buffer,curr_coords,list_of_sequences,points,final_points,final_buffer,final_coords):
     curr_points = count_points(curr_buffer,list_of_sequences,points) 
+    print(curr_points)
     if final_points < curr_points:
         final_points = curr_points
         final_coords = curr_coords
@@ -229,6 +215,7 @@ for seq in range (num_of_sequences):
         stop = False
         mainstop = False
         try_connecting = False
+        connect = False
         maincounterstop = 0
         while len(curr_buffer) < buffer_size:
             checklist = [True for _ in range (num_of_sequences)]
@@ -305,6 +292,7 @@ for seq in range (num_of_sequences):
                                 if try_connecting==False:
                                     for z in range (num_of_sequences):
                                         if z!=seq:
+                                            print("Z",z)
                                             connect,overlap = can_connect(curr_buffer,list_of_sequences[z])
                                             if connect and (len(list_of_sequences[z])-overlap<=(buffer_size-len(curr_buffer))):
                                                 try_connecting = True    # guna reset id_seq ke 0 sama ngubah sec nya deh
@@ -312,6 +300,9 @@ for seq in range (num_of_sequences):
                                                 
                                                 overlapcount.append(overlap)
                                                 print("-----------------kena di pilih dr vertical")
+                            if connect and len(coop)==0:
+                                finish = True
+                                break
                             if curr_buffer[0]!=list_of_sequences[seq][0] and try_connecting==False:
                                 id_seq+=1
                             if len(coop)==0 and try_connecting:    # nothing could connect
@@ -344,6 +335,8 @@ for seq in range (num_of_sequences):
                                 mused[i][idcol] = False
                                 final_points, final_buffer, final_coords = max_point(curr_buffer,curr_coords,list_of_sequences,points,final_points,final_buffer,final_coords)
                                 # choose from horizontal angle
+                                print(curr_buffer)
+                                print(final_buffer)
                                 j = 0
                                 countstop=0
                                 while j < cols:
@@ -363,6 +356,7 @@ for seq in range (num_of_sequences):
                                             print
                                         if curr_buffer[0]!=list_of_sequences[seq][0] and try_connecting==False:
                                             id_seq-=1
+                                        print(curr_buffer)
                                         print("IDSEQQQQQ",id_seq)
                                         sec_copy_mused = mused
                                         # Last spot to avoid getting id_seq indexing error (choosing from horizontal)
@@ -375,18 +369,30 @@ for seq in range (num_of_sequences):
                                             print("YA MSK")
                                         if (len(curr_buffer)<buffer_size and len(list_of_sequences[seq])-id_seq==1) or sublist(curr_buffer,list_of_sequences[seq]): # there's still empty spots in buffer, on the last token
                                             if buffer_size-len(curr_buffer)==1 and len(curr_buffer)!=len(list_of_sequences[seq]): # last spot
-                                                print("MASUK SINI")
                                                 one_buffer,idx = check_next_withindex(matrix,list_of_sequences[seq][id_seq],cols,rows,idcol,1)
-                                                curr_coords.append((idx,idcol))
-                                                final_buffer,final_points,final_coords = last_token(curr_buffer,final_points,list_of_sequences,list_of_sequences[seq][id_seq],points,final_buffer,final_coords,curr_coords)
-                                                finish = True
-                                                break
+                                                print("DONE")
+                                                print(curr_buffer)
+                                                if one_buffer:
+                                                    finish = True
+                                                    curr_coords.append((idx,idcol))
+                                                    final_buffer,final_points,final_coords = last_token(curr_buffer,final_points,list_of_sequences,list_of_sequences[seq][id_seq],points,final_buffer,final_coords,curr_coords)
+                                                    print(one_buffer)
+                                                    break
+                                                else:
+                                                    finish=True
+                                                    break
+                                                
                                             if try_connecting==False:
                                                 coop = []
+                                                print("MASUK SINIII")
                                                 overlapcount = []
                                                 if try_connecting==False:
+                                                    connect = False
                                                     for z in range (num_of_sequences):
                                                         if z!=seq:
+                                                            print("++++++++++++++++++++++")
+                                                            print(z)
+                                                            print("++++++++++++++++++++++")
                                                             connect,overlap = can_connect(curr_buffer,list_of_sequences[z])
                                                             if connect and (len(list_of_sequences[z])-overlap<=(buffer_size-len(curr_buffer))):
                                                                 try_connecting = True    # guna reset id_seq ke 0 sama ngubah sec nya deh
@@ -397,7 +403,11 @@ for seq in range (num_of_sequences):
                                                                 print("-----------------kena di pilih dr hori")
                                         # if curr_buffer[0]!=list_of_sequences[seq][0] and try_connecting==False:
                                         #     id_seq+=1
-                                        if len(coop)==0 and try_connecting:    # nothing could connect
+                                        print(coop)
+                                        if connect and len(coop)==0:
+                                            finish = True
+                                            break
+                                        if (len(coop)==0 and try_connecting) or len(curr_buffer)==buffer_size:    # nothing could connect
                                             finish=True
                                             print("111111")
                                             break
@@ -430,6 +440,9 @@ for seq in range (num_of_sequences):
                                             i = -1  # Reset i to 0 in the next iteration
                                             first = False
                                             break
+                                        if connect and len(coop)==0:
+                                            finish=True
+                                            break
                                         mused = sec_copy_mused
                                     else:
                                         break
@@ -458,11 +471,15 @@ for seq in range (num_of_sequences):
                                 # Last spot to avoid getting id_seq indexing error (choosing from vertical)
                                 if buffer_size-len(curr_buffer)==1: # last spot
                                     one_buffer,idx = check_next_withindex(matrix,list_of_sequences[seq][id_seq],cols,rows,idcol,1)
-                                    curr_coords.append((idx,idcol))
-                                    final_buffer,final_points,final_coords = last_token(curr_buffer,final_points,list_of_sequences,list_of_sequences[seq][id_seq],points,final_buffer,final_coords,curr_coords)
-                                    checklist[seq]=False
-                                    finish = True
-                                    break
+                                    if one_buffer:
+                                        curr_coords.append((idx,idcol))
+                                        final_buffer,final_points,final_coords = last_token(curr_buffer,final_points,list_of_sequences,list_of_sequences[seq][id_seq],points,final_buffer,final_coords,curr_coords)
+                                        checklist[seq]=False
+                                        finish = True
+                                        break
+                                    else:
+                                        finish=True
+                                        break
                                 if curr_buffer[0]!=list_of_sequences[seq][0] and try_connecting==False:
                                     id_seq-=1
                                 if (len(curr_buffer)<buffer_size and len(list_of_sequences[seq])-id_seq==1) or sublist(curr_buffer,list_of_sequences[seq]): # there's still empty spots in buffer, on the last token
@@ -478,12 +495,15 @@ for seq in range (num_of_sequences):
                                                     
                                                     overlapcount.append(overlap)
                                                     print("-----------------kena di pilih dr vertical")
+                                if connect and len(coop)==0:
+                                            finish = True
+                                            break
                                 if curr_buffer[0]!=list_of_sequences[seq][0] and try_connecting==False:
                                     id_seq+=1
                                 if len(coop)==0 and try_connecting:    # nothing could connect
                                     finish=True
                                     break
-                                if sum(checklist)==0:
+                                if sum(checklist)==0 or len(curr_buffer)==buffer_size:
                                     finish = True
                                     break
                                 if try_connecting:
@@ -553,6 +573,9 @@ for seq in range (num_of_sequences):
                                                                 
                                                                 overlapcount.append(overlap)
                                                                 print("-----------------kena di pilih dr vertical")
+                                            if connect and len(coop)==0:
+                                                finish = True
+                                                break
                                             if curr_buffer[0]!=list_of_sequences[seq][0] and try_connecting==False:
                                                 id_seq+=1
                                             if len(coop)==0 and try_connecting:    # nothing could connect
@@ -597,7 +620,7 @@ elapsed_time = end_time - start_time
 print("---------------- Results:\n")
 print("Points obtained: " + str(final_points))
 if final_points==0:
-    print("It aint worth/no possible solution")
+    print("Not worth/no possible solution")
 else:
     print("Final buffer:")
     print(' '.join(final_buffer))
@@ -611,7 +634,6 @@ while(True):
         with open(output_name, "w") as output:
             output.write(str(final_points) + "\n")
             output.write(str(' '.join(final_buffer)) + "\n") 
-            # TESTING - Save coords not yet implemented
             for c in final_coords:
                 output.write(f"{c}\n")
             output.write(f"{elapsed_time} ms")

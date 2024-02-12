@@ -6,8 +6,11 @@
 # BD E9 1C E9 1C
 # 30
 def can_connect(curr_buffer, seqarr):
+    if len(curr_buffer)==1 and seqarr[0]!=curr_buffer[0]:
+        return False,0
     overlap_lens = (i + 1 for i, e in enumerate(seqarr) if e == curr_buffer[-1])
     for overlap_len in overlap_lens:
+        print(overlap_len)
         for i in range(overlap_len):
             if curr_buffer[-overlap_len + i] != seqarr[i]:
                 break
@@ -16,8 +19,10 @@ def can_connect(curr_buffer, seqarr):
     return False,0
 
 # Example usage:
-arr1 = ["SS","S"]
-arr2 = ["SS","S","SS"]
+arr1=["7A"]
+arr2 = ["7SA","1C","5X","BD","7A","1C","55"]
+# arr2 = ["SS","S"]
+# arr1 = ["SS","S","SS"]
 result,x = can_connect(arr1, arr2)
 print(result)  # Output: True
 print(x)

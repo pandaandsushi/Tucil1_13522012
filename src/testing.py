@@ -9,32 +9,46 @@ a = [1, 2, 3, 4, 5]
 b1 = [2, 3]
 b2 = [2, 3, 4]
 b3 = [1, 2, 3, 4, 5]
-
+curr_buffer = ["7A","BD","SS"]
+list_of_sequences = ["7A","BD"]
 print(sublist(a, b1))  # True
 print(sublist(a, b2))  # True
 print(sublist(a, b3))  # False
-
-
+print(sublist(curr_buffer,list_of_sequences))
 
 
 def count_points(buffer,arr_of_seq,arr_of_points):
     res = 0
     for i in range (len(arr_of_seq)):
-        for j in range (len(buffer)):
-            if (buffer[j]==arr_of_seq[i][0]):
-                count = 1
-                print("tes")
-                if len(buffer)>=len(arr_of_seq[i]):
-                    for k in range(len(arr_of_seq[i])-1):
-                        if (buffer[k+j] == arr_of_seq[i][k]):
-                            count += 1
-                    print("Count",count)
-                    if count == len(arr_of_seq[i]):
-                        res = arr_of_points[i] + res
-                        break
-                else:
-                    return 0
+        print("Masuk")
+        if sublist(buffer,arr_of_seq[i]):
+            res+=arr_of_points[i]
     return res
+
+# def count_points(buffer,arr_of_seq,arr_of_points):
+#     res = 0
+#     for i in range (len(arr_of_seq)):
+#         remaindertocheck = len(buffer)
+#         for j in range (len(buffer)):
+#             remaindertocheck-=1
+#             print(buffer[j])
+#             print(arr_of_seq[i][0])
+#             print("tes")
+#             if (buffer[j]==arr_of_seq[i][0]):
+#                 count = 0
+#                 if len(buffer)>=len(arr_of_seq[i]):
+#                     for k in range(len(arr_of_seq[i])):
+#                         if remaindertocheck+1<len(arr_of_seq[i]):
+#                             break
+#                         if (buffer[k+j] == arr_of_seq[i][k]):
+#                             count += 1
+#                     print(count)
+#                     if count == len(arr_of_seq[i]):
+#                         res = arr_of_points[i] + res
+#                         break
+#                 else:
+#                     return 0
+#     return res
 def max_point(curr_buffer,list_of_sequences,points,final_points,final_buffer):
     curr_points = count_points(curr_buffer,list_of_sequences,points) 
     if final_points == None:
@@ -45,8 +59,8 @@ def max_point(curr_buffer,list_of_sequences,points,final_points,final_buffer):
         final_buffer = curr_buffer
     return final_points,final_buffer
 
-curr_buffer = ["BD", "E9", "55","7A"]
-list_of_sequences = ["BD", "E9", "55","7A"]
+curr_buffer = ["7A","BD","SS"]
+list_of_sequences = [["7A","BD"]]
 points = [15]
 final_points=0
 final_buffer=[]
