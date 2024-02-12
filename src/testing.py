@@ -1,6 +1,21 @@
-for i in range (10):
-    i=5
-    print(i)
+def sublist(main_list, sublist):
+    for i in range(len(main_list) - len(sublist) + 1):
+        if main_list[i:i+len(sublist)] == sublist:
+            return True
+    return False
+
+# Example usage:
+a = [1, 2, 3, 4, 5]
+b1 = [2, 3]
+b2 = [2, 3, 4]
+b3 = [1, 2, 3, 4, 5]
+
+print(sublist(a, b1))  # True
+print(sublist(a, b2))  # True
+print(sublist(a, b3))  # False
+
+
+
 
 def count_points(buffer,arr_of_seq,arr_of_points):
     res = 0
