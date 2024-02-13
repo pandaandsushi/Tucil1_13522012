@@ -1,6 +1,6 @@
 # Tucil1-Stima ( •̀ ω •́ )✧
-## Let's Solve The Breach Protocol from CYBERPUNK 2077 Using Brute Force Algorithm!
-## A mini project made by Thea Josephine 13522012
+#### Let's Solve The Breach Protocol from CYBERPUNK 2077 Using Brute Force Algorithm!
+#### A mini project made by Thea Josephine 13522012
 
 ## Description 🫧
 #### This simple project was made to solve the Breach Protocol problem from Cyberpunk 2077 using brute force algorithm. User could use a file input or enter inputs by terminal CLI (randomized matrix and sequences). You could also save the result as a txt

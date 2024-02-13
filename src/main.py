@@ -6,7 +6,17 @@ print("Made by Thea Josephine 13522012 :>\n")
 print("Do you want to use an input file or customized random tokens? (1/2)\n")
 print("1. Input file (.txt)\n")
 print("2. Customized and randomized (CLI)\n")
-
+#  Ensure use inputs a positive int
+def positive_input(prompt):
+    while True:
+        try:
+            user_input = int(input(prompt))
+            if user_input > 0:
+                return user_input
+            else:
+                print("Value has to be bigger than 0")
+        except ValueError:
+            print("Invalid input. Please enter a valid integer.")
 while True:
     byCLI_or_file = input("=> ")
     if byCLI_or_file == "1":
@@ -56,6 +66,7 @@ while True:
         for question in questions:
             key = question["key"]
             prompt = question["prompt"]
+
             if "tokens" in key:
                 tokens = get_tokens()
             elif "matrix" in key:
@@ -64,11 +75,11 @@ while True:
                 rows = int(inssplit[0])
                 cols = int(inssplit[1])
             elif "buffer_size" in key:
-                buffer_size = int(input(f"{prompt}: "))
+                buffer_size = positive_input(f"{prompt}: ")
             elif "num_of_sequences" in key:
-                num_of_sequences = int(input(f"{prompt}: "))
+                num_of_sequences = positive_input(f"{prompt}: ")
             elif "seq_max_size" in key:
-                seq_max_size = int(input(f"{prompt}: "))
+                seq_max_size = positive_input(f"{prompt}: ")
 
 
 
@@ -100,6 +111,7 @@ while True:
         break
     else:
         print("Wrong input, try again.\n")
+
 
 
 # Display reading file inputs
@@ -269,7 +281,7 @@ for seq in range (num_of_sequences):
         maincounterstop = 0
         checklist = [True for _ in range (num_of_sequences)]
         if mainstop:
-            print("⋆ˊˎ-•̩̩͙-　*̩̩̥͙ Untuk sequence ini tidak ada solusi\n\n")
+            print("⋆ˊˎ-•̩̩͙-*̩̩̥͙ Untuk sequence ini tidak ada solusi\n\n")
             break
         if finish:
             break
