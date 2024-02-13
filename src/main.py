@@ -337,8 +337,13 @@ for seq in range (num_of_sequences):
                                     curr_coords.append((idx,idcol))
                                     final_buffer,final_points,final_coords = last_token(curr_buffer,final_points,list_of_sequences,list_of_sequences[seq][id_seq],points,final_buffer,final_coords,curr_coords)
                                     checklist[seq]=False
-                                finish = True
-                                break
+                                    finish=True
+                                    break
+                                else:
+                                    curr_buffer.pop(len(curr_buffer)-1)
+                                    curr_coords.pop(len(curr_buffer))
+                                    id_seq-=1
+                                    break
                             cekhori = check_next_horizontal(i,idcol,list_of_sequences[seq][id_seq],matrix,cols)
                             if cekhori==False or matrix[i][idcol] != list_of_sequences[seq][id_seq]:
                                 countstop+=1
@@ -368,8 +373,13 @@ for seq in range (num_of_sequences):
                                                 finish = True
                                                 curr_coords.append((i,idx))
                                                 final_buffer,final_points,final_coords = last_token(curr_buffer,final_points,list_of_sequences,list_of_sequences[seq][id_seq],points,final_buffer,final_coords,curr_coords)
-                                            finish=True
-                                            break
+                                                finish=True
+                                                break
+                                            else:
+                                                curr_buffer.pop(len(curr_buffer)-1)
+                                                curr_coords.pop(len(curr_buffer))
+                                                id_seq-=1
+                                                break
                                         cekveri = check_next_vertical(i, j, list_of_sequences[seq][id_seq], matrix, rows)
                                         if cekveri==False or matrix[i][j] != list_of_sequences[seq][id_seq]:
                                             countstop+=1
@@ -408,8 +418,13 @@ for seq in range (num_of_sequences):
                                         curr_coords.append((idx,j))
                                         final_buffer,final_points,final_coords = last_token(curr_buffer,final_points,list_of_sequences,list_of_sequences[seq][id_seq],points,final_buffer,final_coords,curr_coords)
                                         checklist[seq]=False
-                                    finish = True
-                                    break
+                                        finish=True
+                                        break
+                                    else:
+                                        curr_buffer.pop(len(curr_buffer)-1)
+                                        curr_coords.pop(len(curr_buffer))
+                                        id_seq-=1
+                                        break
                                 cekhori = check_next_horizontal(i,idcol,list_of_sequences[seq][id_seq],matrix,cols)
                                 if cekhori==False or matrix[i][idcol] != list_of_sequences[seq][id_seq]:
                                     countstop+=1
@@ -438,8 +453,13 @@ for seq in range (num_of_sequences):
                                                     curr_coords.append((i,idx))
                                                     final_buffer,final_points,final_coords = last_token(curr_buffer,final_points,list_of_sequences,list_of_sequences[seq][id_seq],points,final_buffer,final_coords,curr_coords)
                                                     checklist[seq]=False
-                                                finish=True
-                                                break
+                                                    finish=True
+                                                    break
+                                                else:
+                                                    curr_buffer.pop(len(curr_buffer)-1)
+                                                    curr_coords.pop(len(curr_buffer))
+                                                    id_seq-=1
+                                                    break
                                             cekveri = check_next_vertical(i, j, list_of_sequences[seq][id_seq], matrix, rows)
                                             if cekveri==False or matrix[i][j] != list_of_sequences[seq][id_seq]:
                                                 countstop+=1

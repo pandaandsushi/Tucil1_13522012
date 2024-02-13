@@ -213,6 +213,7 @@ def last_token(curr_buffer,final_points,list_of_sequences,token,points,final_buf
 def check_next_withindex(matrix,token,cols,rows,id,type):
     if type == 0:       # check horizontal
         for i in range (cols):
+            print("YG DICEK",matrix[id][i])
             if matrix[id][i]==token:
                 return True,i
         return False,0
@@ -311,6 +312,7 @@ for seq in range (num_of_sequences):
     print("")
     print("☆*: .｡. oo .｡.:*☆")
     print("Sequence ke-" + str(seq))
+    print(list_of_sequences[seq])
     print("☆*: .｡. oo .｡.:*☆")
     if (len(list_of_sequences[seq])<=buffer_size):
         curr_buffer = []
@@ -382,7 +384,6 @@ for seq in range (num_of_sequences):
                             print("TESSSS",matrix[i][idcol])
                             print("Nilai i:",i)
                             print("Nilai idcol:",idcol)
-
                             # INI NNT - EROR
                             # Last spot to avoid getting id_seq indexing error (choosing from vertical)
                             if id_seq==len(list_of_sequences[seq])-1: # last spot
@@ -436,13 +437,21 @@ for seq in range (num_of_sequences):
                                             print("YA MSK")
                                         if id_seq==len(list_of_sequences[seq])-1: # last spot
                                             one_buffer,idx = check_next_withindex(matrix,list_of_sequences[seq][id_seq],cols,rows,i,0)
+                                            print(list_of_sequences[seq][id_seq])
+                                            print(one_buffer)
                                             if one_buffer:
                                                 finish = True
                                                 curr_coords.append((i,idx))
                                                 final_buffer,final_points,final_coords = last_token(curr_buffer,final_points,list_of_sequences,list_of_sequences[seq][id_seq],points,final_buffer,final_coords,curr_coords)
-                                            print("????????????????????????????????????????????????",curr_buffer)
-                                            finish=True
-                                            break
+                                                print("????????????????????????????????????????????????",curr_buffer)
+                                                finish=True
+                                                break
+                                            else:
+                                                curr_buffer.pop(len(curr_buffer)-1)
+                                                curr_coords.pop(len(curr_buffer))
+                                                id_seq-=1
+                                                break
+
                                         cekveri = check_next_vertical(i, j, list_of_sequences[seq][id_seq], matrix, rows)
                                         if cekveri==False or matrix[i][j] != list_of_sequences[seq][id_seq]:
                                             countstop+=1
